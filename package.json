@@ -1,0 +1,20 @@
+{
+  "name": "grocery-azure-app",
+  "version": "1.0.0",
+  "description": "Grocery web application using Azure Table, Blob, Queue, and Files storage services",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.3.0",
+    "@azure/storage-blob": "^12.26.0",
+    "@azure/storage-file-share": "^12.25.0",
+    "@azure/storage-queue": "^12.24.0",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^11.0.3"
+  }
+}

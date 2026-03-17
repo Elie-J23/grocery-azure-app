@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grocery Cloud Store</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">Grocery Cloud Store</div>
+      <div>
+        <a href="/">Home</a>
+        <a href="/customers/register">Register Customer</a>
+        <a href="/customers/login">Customer Login</a>
+        <a href="/products/new">Add Product</a>
+        <a href="/orders/history">Order History</a>
+        <a href="/admin/dashboard">Admin Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Fresh Groceries, Cloud Powered</h1>
+      <p>Browse products, place orders, and track order processing status.</p>
+    </section>
+
+    <% if (error) { %>
+      <section class="form-wrap">
+        <p class="meta"><strong>Notice:</strong> <%= error %></p>
+      </section>
+    <% } %>
+
+    <section class="form-wrap">
+      <h3>Suggested Grocery Products</h3>
+      <p class="meta">tomatoes, milk, bread, meat, chicken meat, vegetables, pasta, apple, eggs, chips</p>
+    </section>
+
+    <section class="grid">
+      <% if (!products || products.length === 0) { %>
+        <div class="card">
+          <h3>No products available</h3>
+          <p class="meta">Add your first grocery product from the admin page.</p>
+          <a class="btn" href="/products/new">Create Product</a>
+        </div>
+      <% } %>
+
+      <% products.forEach(function(product){ %>
+        <article class="card">
+          <% if (product.imageUrl) { %>
+            <img src="<%= product.imageUrl %>" alt="<%= product.name || 'Product image' %>" />
+          <% } else { %>
+            <img alt="No product image available" />
+          <% } %>
+
+          <h3><%= product.name || 'Unnamed Product' %></h3>
+          <p class="meta"><strong>Category:</strong> <%= product.category || 'N/A' %></p>
+          <p class="meta price">$<%= product.price || '0.00' %></p>
+          <p class="meta"><strong>Stock:</strong> <%= product.stock || '0' %></p>
+          <p class="meta"><%= product.description || 'No description provided.' %></p>
+          <a class="btn" href="/orders/new/<%= product.rowKey %>">Order this product</a>
+        </article>
+      <% }) %>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">ABC Retail Grocery Application | Azure Storage Integrated</div>
+  </footer>
+</body>
+</html>

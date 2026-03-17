@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Login</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">Grocery Cloud Store</div>
+      <div>
+        <a href="/">Home</a>
+        <a href="/customers/register">Register Customer</a>
+        <a href="/products/new">Add Product</a>
+        <a href="/orders/history">Order History</a>
+        <a href="/admin/dashboard">Admin Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Customer Login</h1>
+      <p>Login with your registered email to track and manage your orders.</p>
+      <% if (error) { %>
+        <p class="meta"><strong>Error:</strong> <%= error %></p>
+      <% } %>
+    </section>
+
+    <section class="form-wrap">
+      <form method="POST" action="/customers/login">
+        <label>Email</label>
+        <input type="email" name="email" required />
+        <button type="submit">Login</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Customer order tracking portal</div>
+  </footer>
+</body>
+</html>
