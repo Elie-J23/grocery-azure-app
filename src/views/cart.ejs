@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart - Grocery Cloud Store</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">🍎 Grocery Cloud Store</div>
+      <div>
+        <a href="/">🏠 Home</a>
+        <a href="/cart">🛒 Cart (<%= (cart && cart.items ? cart.items.length : 0) %>)</a>
+        <a href="/customers/login">🔑 Login</a>
+        <a href="/admin/dashboard">📊 Admin</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <h1>🛒 Shopping Cart</h1>
+      <p>Review your selected items before checkout</p>
+    </section>
+
+    <% if (!cart || cart.items.length === 0) { %>
+      <section class="form-wrap text-center">
+        <div class="empty-state">
+          <span style="font-size: 4rem; opacity: 0.5;">🛍️</span>
+          <h3>Your cart is empty</h3>
+          <p>Add some delicious groceries to get started!</p>
+          <a href="/" class="btn">Browse Products</a>
+        </div>
+      </section>
+    <% } else { %>
+      <section class="form-wrap">
+        <div class="table-wrap">
+          <table class="app-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% cart.items.forEach(function(item, index) { %>
+                <tr>
+                  <td>
+                    <% if (item.imageUrl) { %>
+                      <img src="<%= item.imageUrl %>" alt="<%= item.name %>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-right: 12px;">
+                    <% } %>
+                    <%= item.name %>
+                  </td>
+                  <td>$<%= item.price %></td>
+                  <td><%= item.quantity %></td>
+                  <td>$<%= (item.price * item.quantity).toFixed(2) %></td>
+                  <td>
+                    <form method="POST" action="/cart/remove/<%= index %>" style="display: inline;">
+                      <button type="submit" class="btn btn-danger" style="padding: 4px 8px;">Remove</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3"><strong>Total: $<%= cart.total %></strong></td>
+                <td colspan="2">
+                  <a href="/checkout" class="btn btn-primary">Proceed to Checkout →</a>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+    <% } %>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Secure checkout powered by Azure</div>
+  </footer>
+</body>
+</html>
+

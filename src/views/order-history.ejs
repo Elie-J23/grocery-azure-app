@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order History</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">Grocery Cloud Store</div>
+      <div>
+        <a href="/">Home</a>
+        <a href="/customers/register">Register Customer</a>
+        <a href="/customers/login">Customer Login</a>
+        <a href="/products/new">Add Product</a>
+        <a href="/orders/history">Order History</a>
+        <a href="/admin/dashboard">Admin Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Order History</h1>
+      <p>Track who ordered, what was ordered, and current processing status.</p>
+      <% if (error) { %>
+        <p class="meta"><strong>Notice:</strong> <%= error %></p>
+      <% } %>
+    </section>
+
+    <section class="form-wrap">
+      <% if (!orders || orders.length === 0) { %>
+        <p class="meta">No orders found yet.</p>
+      <% } else { %>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Order ID</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Customer ID</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Items</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Total</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Status</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% orders.forEach(function(order){ %>
+                <tr>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= order.rowKey %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= order.customerId || 'N/A' %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;">
+                    <%
+                      let items = [];
+                      try {
+                        items = JSON.parse(order.itemsJson || "[]");
+                      } catch (e) {
+                        items = [];
+                      }
+                    %>
+                    <% if (items.length === 0) { %>
+                      N/A
+                    <% } else { %>
+                      <% items.forEach(function(item, idx){ %>
+                        <div>Product: <%= item.productId %> | Qty: <%= item.quantity %></div>
+                      <% }) %>
+                    <% } %>
+                  </td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;">$<%= order.totalAmount || 0 %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;">
+                    <%= order.status || 'Pending' %>
+                  </td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= order.createdAt || '-' %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Order monitoring dashboard</div>
+  </footer>
+</body>
+</html>

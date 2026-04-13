@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Dashboard</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">Grocery Cloud Store</div>
+      <div>
+        <a href="/">Home</a>
+        <a href="/customers/login">Customer Login</a>
+        <a href="/orders/history">Order History</a>
+        <a href="/admin/dashboard">Admin Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Customer Dashboard</h1>
+      <p>Customer ID: <strong><%= customerId %></strong></p>
+      <% if (error) { %>
+        <p class="meta"><strong>Error:</strong> <%= error %></p>
+      <% } %>
+    </section>
+
+    <section class="form-wrap">
+      <h3>Your Orders</h3>
+      <% if (!orders || orders.length === 0) { %>
+        <p class="meta">No orders yet.</p>
+      <% } else { %>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Order ID</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Items</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Total</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Payment</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Status</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% orders.forEach(function(order){ %>
+                <tr>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= order.rowKey %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;">
+                    <% try { %>
+                      <% const parsed = JSON.parse(order.itemsJson || "[]"); %>
+                      <% if (parsed.length === 0) { %>
+                        N/A
+                      <% } else { %>
+                        <% parsed.forEach(function(item, idx){ %>
+                          <div>Product: <%= item.productId %>, Qty: <%= item.quantity %></div>
+                        <% }) %>
+                      <% } %>
+                    <% } catch (e) { %>
+                      N/A
+                    <% } %>
+                  </td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;">$<%= order.totalAmount || 0 %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= order.paymentMethod || "Card" %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= order.status || "Pending" %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;">
+                    <% if ((order.status || "Pending") === "Pending") { %>
+                      <form method="POST" action="/orders/<%= order.rowKey %>/cancel">
+                        <button type="submit">Cancel</button>
+                      </form>
+                    <% } else { %>
+                      -
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </section>
+
+    <section class="form-wrap">
+      <h3>Place New Order</h3>
+      <p class="meta">Choose a product to place another order.</p>
+      <div class="grid">
+        <% products.forEach(function(product){ %>
+          <article class="card">
+            <h3><%= product.name || "Unnamed Product" %></h3>
+            <p class="meta">$<%= product.price || 0 %></p>
+            <a class="btn" href="/orders/new/<%= product.rowKey %>?customerId=<%= customerId %>">Order</a>
+          </article>
+        <% }) %>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Manage your orders and payments</div>
+  </footer>
+</body>
+</html>

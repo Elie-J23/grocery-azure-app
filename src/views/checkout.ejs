@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Grocery Cloud Store</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">🍎 Grocery Cloud Store</div>
+      <div>
+        <a href="/">🏠 Home</a>
+        <a href="/cart">🛒 Cart</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <h1>💳 Checkout</h1>
+      <p>Secure payment & delivery</p>
+    </section>
+
+    <section class="form-wrap">
+      <form method="POST" action="/payment">
+        <fieldset>
+          <legend>Order Summary</legend>
+          <% if (cart && cart.items.length > 0) { %>
+            <% cart.items.forEach(item => { %>
+              <div class="order-item">
+                <span><%= item.name %> x<%= item.quantity %></span>
+                <span>$<%= (item.price * item.quantity).toFixed(2) %></span>
+              </div>
+            <% }) %>
+            <div class="total-line">
+              <strong>Total: $<%= cart.total %></strong>
+            </div>
+          <% } %>
+        </fieldset>
+
+        <fieldset>
+          <legend>Payment Details</legend>
+          <div class="form-row">
+            <label>Card Number</label>
+            <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" required>
+          </div>
+          <div class="form-row">
+            <label>Expiry</label>
+            <input type="text" name="expiry" placeholder="MM/YY" required>
+          </div>
+          <div class="form-row">
+            <label>CVV</label>
+            <input type="text" name="cvv" placeholder="123" required>
+          </div>
+          <div class="form-row">
+            <label>Name on Card</label>
+            <input type="text" name="cardName" placeholder="John Doe" required>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Delivery Address</legend>
+          <div class="form-row">
+            <label>Full Address</label>
+            <textarea name="deliveryAddress" required>Enter your delivery address</textarea>
+          </div>
+        </fieldset>
+
+        <input type="hidden" name="cartItems" value="<%= JSON.stringify(cart.items) %>">
+        <input type="hidden" name="total" value="<%= cart.total %>">
+
+        <button type="submit" class="btn btn-primary full-width">Complete Order & Pay Now</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Secure checkout powered by Azure Queue Storage</div>
+  </footer>
+</body>
+</html>
+

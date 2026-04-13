@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+<div class="brand">🍎 Grocery Cloud Store</div>
+      <div>
+        <a href="/">Home</a>
+        <a href="/products/new">Add Product</a>
+        <a href="/orders/history">Order History</a>
+        <a href="/customers/login">Customer Login</a>
+        <a href="/admin/dashboard">Admin Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Admin Dashboard</h1>
+      <p>Manage products, monitor orders, and view customer records.</p>
+      <% if (error) { %>
+        <p class="meta"><strong>Error:</strong> <%= error %></p>
+      <% } %>
+    </section>
+
+    <section class="form-wrap">
+      <h3>Products</h3>
+      <% if (!products || products.length === 0) { %>
+        <p class="meta">No products available.</p>
+      <% } else { %>
+        <div class="table-wrap">
+          <table class="app-table">
+            <thead>
+              <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Stock</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% products.forEach(function(product){ %>
+                <tr>
+                  <td><%= product.rowKey %></td>
+                  <td><%= product.name || "Unnamed" %></td>
+                  <td><%= product.stock || 0 %></td>
+                  <td>
+                    <form method="POST" action="/admin/products/<%= product.rowKey %>/delete" style="display: inline;">
+                      <button type="submit" class="btn" style="padding: 4px 12px; font-size: 0.85rem;">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </section>
+
+    <section class="form-wrap">
+      <h3>Orders</h3>
+      <% if (!orders || orders.length === 0) { %>
+        <p class="meta">No orders available.</p>
+      <% } else { %>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Order ID</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Customer ID</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Total</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Status</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Update</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% orders.forEach(function(order){ %>
+                <tr>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= order.rowKey %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= order.customerId || "N/A" %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;">$<%= order.totalAmount || 0 %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= order.status || "Pending" %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;">
+                    <form method="POST" action="/admin/orders/<%= order.rowKey %>/status">
+                      <select name="status">
+                        <option value="Pending">Pending</option>
+                        <option value="Processed">Processed</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                      <button type="submit">Save</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </section>
+
+    <section class="form-wrap">
+      <h3>Customers</h3>
+      <% if (!customers || customers.length === 0) { %>
+        <p class="meta">No customers found.</p>
+      <% } else { %>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Customer ID</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Name</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% customers.forEach(function(customer){ %>
+                <tr>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= customer.rowKey %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= customer.fullName || "N/A" %></td>
+                  <td style="padding:8px; border-bottom:1px solid #f0f0f0;"><%= customer.email || "N/A" %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Administrative control center</div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Grocery Cloud Store</title>
+  <link rel="stylesheet" href="/styles.css" />
+
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">🍎 Grocery Cloud Store</div>
+      <div>
+        <a href="/">🏠 Home</a>
+
+        <a href="/customers/register">📝 Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="login-hero">
+      <h1>🔑 Welcome Back</h1>
+      <p>Access your account to manage orders and shopping</p>
+    </section>
+
+    <% if (error) { %>
+      <section class="form-wrap notice-error">
+        <p><strong>⚠️ <%= error %></strong></p>
+      </section>
+    <% } %>
+
+    <section class="form-wrap">
+      <h3>Customer Login</h3>
+      <form method="POST" action="/customers/login">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="customer@example.com" required />
+        <button type="submit" class="btn full-width">🚀 Continue Shopping</button>
+      </form>
+      <div class="form-wrap">
+        <strong>💡 Tip:</strong> Register first via <a href="/customers/register">/register</a>, then login with your email
+      </div>

@@ -1,0 +1,5 @@
+- [x] Update src/server.js to use Azure-compatible PORT binding (`process.env.PORT || 3000`)
+- [x] Replace `app.listen(config.port, ...)` with `app.listen(PORT, ...)`
+- [x] Update startup log to `Grocery app running on port ${PORT}`
+- [x] Verify no runtime dependency on `config.port` remains in server startup
+- [ ] Commit and push changes (`fix Azure port binding`)
