@@ -1,5 +1,10 @@
 const express = require("express");
 
+console.log(
+  "AZURE STORAGE:",
+  process.env.AZURE_STORAGE_CONNECTION_STRING ? "SET" : "MISSING"
+);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
