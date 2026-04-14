@@ -285,17 +285,16 @@ async function bootstrap() {
 
 const PORT = process.env.PORT || 3000;
 
+app.listen(PORT, () => {
+  console.log(`Grocery app running on port ${PORT}`);
+});
+
 bootstrap()
   .then(() => {
     console.log("Azure services initialized successfully.");
   })
   .catch((err) => {
     console.error("Startup warning: Azure services init failed.", err.message);
-    console.error("App will still start. Fix connection and retry operations.");
-  })
-  .finally(() => {
-    app.listen(PORT, () => {
-      console.log(`Grocery app running on port ${PORT}`);
-    });
+    console.error("App is running; fix Azure service configuration and retry operations.");
   });
 
