@@ -276,11 +276,11 @@ app.post("/worker/process-order", async (req, res) => {
 });
 
 async function bootstrap() {
-  await initTables();
-  await initBlobContainer();
-  await initQueues();
-  await initFileShare();
-  await appendLog("Application initialized");
+  // await initTables();
+  //await initBlobContainer();
+  //await initQueues();
+  //await initFileShare();
+  //await appendLog("Application initialized");
 }
 
 const PORT = process.env.PORT || 3000;
